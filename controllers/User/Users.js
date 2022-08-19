@@ -14,23 +14,27 @@ const nodemailer = new nodemailer_1.default();
 const registerUserController = async (req, res) => {
     const userName = req.body.userName;
     const email = req.body.email;
-    const checkUserRegistered = await User_1.User.findOne({ email, userName });
-    if (checkUserRegistered !== null)
-        return res.status(404).json((0, exports.ErrorResponse)(true, 'Az email cím már regisztrálva lett'));
+    const firstPass = req.body.firstPassword;
+    try {
+        await User_1.User.register(email, userName, firstPass);
+    }
+    catch (error) {
+        return res.status(404).json((0, exports.ErrorResponse)(true, error.message));
+    }
     const validationErrors = (0, express_validator_1.validationResult)(req);
     if (!validationErrors.isEmpty())
         return res.status(422).json({ errors: validationErrors.array() });
     try {
-        const hashedPass = await bcrypt_1.default.hash(req.body.firstPassword, 10);
+        const hashedPass = await bcrypt_1.default.hash(firstPass, 10);
         const emailToken = jsonwebtoken_1.default.sign({ userName, email }, endpoints_config_1.EMAIL_SECRET, {
             expiresIn: `${nodemailer.EMAIL_TOKEN_EXPIRESIN}min`,
         });
-        await nodemailer.sendEmailUserRegistersAndResendEmail(email, 'Email cím regisztrálása', userName, emailToken);
         await User_1.User.create({
             userName,
             password: hashedPass,
             email,
         });
+        await nodemailer.sendEmailUserRegistersAndResendEmail(email, 'Email cím regisztrálása', userName, emailToken);
         res.status(201).json({
             message: 'A regisztráció sikeres volt - Az email címedre megküldtük a regisztráció megerősítéhez szükséges kódot!',
         });
@@ -41,10 +45,9 @@ const registerUserController = async (req, res) => {
 };
 exports.registerUserController = registerUserController;
 const loginUserController = async (req, res) => {
-    const user = await User_1.User.findOne({ $or: [{ email: req.body.email }, { userName: req.body.email }] });
-    if (!user)
-        return res.status(404).json((0, exports.ErrorResponse)(true, 'Nincs regisztrálva felhasználó ezzel az email címmel'));
+    const userName = req.body.email;
     try {
+        const user = await User_1.User.login(userName);
         if (await bcrypt_1.default.compare(req.body.password, user.password)) {
             if (!user.isEmailConfirmed)
                 return res
@@ -64,7 +67,7 @@ const loginUserController = async (req, res) => {
             res.status(403).json((0, exports.ErrorResponse)(true, 'Helytelen jelszó', 'password'));
     }
     catch (error) {
-        res.status(500).json(error);
+        res.status(404).json((0, exports.ErrorResponse)(true, error.message));
     }
 };
 exports.loginUserController = loginUserController;

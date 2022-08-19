@@ -8,6 +8,8 @@ class BaseProduct {
     returnProductModelWithPaginateInfoWithoutDetails = async (request, extraFilerParameters = {}) => {
         const currentPage = parseInt(request.query.currentPage) || 1;
         const perPage = parseInt(request.query.perPage) || 12;
+        const productName = request.query.productName.trim() || '';
+        const productNameRegexString = new RegExp(productName, 'i');
         const orderBy = request.query.orderBy || 'asc';
         const byManufacturer = request.query.byManufacturer === 'all' ? '' : request.query.byManufacturer;
         const warranty = request.query.selectedWarranty.trim();
@@ -17,6 +19,11 @@ class BaseProduct {
         const foundProduct = await this.productModel
             .find({
             manufacturer: new RegExp(byManufacturer, 'i'),
+            $or: [
+                { type: productNameRegexString },
+                { typeCode: productNameRegexString },
+                { itemNumber: productNameRegexString },
+            ],
             ...byWarranty,
             price: { $gte: priceRange[0], $lte: priceRange[1] },
             ...extraFilerParameters,
@@ -28,7 +35,7 @@ class BaseProduct {
         const endIndex = currentPage * perPage;
         const pagedProducts = foundProduct.slice(startIndex, endIndex);
         totalPages = Math.ceil(foundProduct.length / perPage);
-        return { foundProduct: pagedProducts, totalPages };
+        return { foundProduct: pagedProducts, totalPages, totalProductCount: foundProduct.length };
     };
     returnProductDetails = async (productId) => {
         const foundProductDetails = await this.productModel

@@ -64,4 +64,17 @@ const UserSchema = new mongoose_1.Schema({
         },
     ],
 });
+UserSchema.statics.register = async function (email, userName, firstPassword) {
+    if (!email || !userName || !firstPassword)
+        throw Error('Adj meg egy email címet, felhasználónevet és jelszót!');
+    const checkUserRegisteredWithEmail = await this.findOne({ $or: [{ userName }, { email }] });
+    if (checkUserRegisteredWithEmail !== null)
+        throw Error('Az email cím vagy felhasználónév már regisztrálva lett');
+};
+UserSchema.statics.login = async function (userNameOrEmail) {
+    const user = await this.findOne({ $or: [{ email: userNameOrEmail }, { userName: userNameOrEmail }] });
+    if (!user)
+        throw Error('Nincs regisztrálva felhasználó ezzel az email címmel');
+    return user;
+};
 exports.User = (0, mongoose_1.model)('User', UserSchema);

@@ -32,10 +32,11 @@ class VgaProduct extends BaseProduct_1.default {
                 'details.pcieType': new RegExp(selectedPciType, 'i'),
                 'details.vramType': new RegExp(selectedVramType, 'i'),
             };
-            const { foundProduct, totalPages } = await this.returnProductModelWithPaginateInfoWithoutDetails(req, extraQueryParams);
+            const { foundProduct, totalPages, totalProductCount } = await this.returnProductModelWithPaginateInfoWithoutDetails(req, extraQueryParams);
             res.status(200).json({
                 allProducts: foundProduct,
                 totalPages,
+                totalProductCount,
             });
         }
         catch (error) {

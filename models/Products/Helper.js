@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BaseSchemaPropertiesAndTypes = exports.ChartData = exports.ProductRatingValuesSchema = void 0;
+const mongoose_1 = require("mongoose");
 const responses = {
     type: [
         {
@@ -13,7 +14,7 @@ const responses = {
 exports.ProductRatingValuesSchema = {
     type: [
         {
-            userId: { type: String, required: true },
+            userId: { type: mongoose_1.Schema.Types.ObjectId, required: true },
             userName: { type: String, required: true },
             rating: { type: Number, required: true },
             ratedAt: { type: Date, required: true },
