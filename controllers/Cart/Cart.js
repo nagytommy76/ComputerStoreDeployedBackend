@@ -28,9 +28,12 @@ const addCartItemsToUserController = async (req, res) => {
     try {
         const { foundUser } = req;
         const productId = req.body._id;
+        const ItemQuantity = req.body.quantity;
+        if (ItemQuantity === null || ItemQuantity <= 0)
+            return res.status(404).json({ message: 'Helytelen mennyiség' });
         let toSaveOrModifyObject = {
             itemId: productId,
-            quantity: req.body.quantity,
+            quantity: ItemQuantity,
             productType: req.body.productType,
             displayImage: req.body.displayImage,
             displayName: req.body.displayName,
