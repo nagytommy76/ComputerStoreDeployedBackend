@@ -10,8 +10,7 @@
    },
    "scripts": {
       "start": "nodemon server.js",
-      "dev": "nodemon -L server.js",
-      "build": "tsc -p ."
+      "dev": "nodemon -L server.js"
    },
    "dependencies": {
       "bcrypt": "^5.0.1",
