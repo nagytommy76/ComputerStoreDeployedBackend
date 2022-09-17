@@ -2,15 +2,15 @@
    "name": "node-api",
    "version": "1.0.0",
    "description": "Computer Store backend REST API",
-   "main": "server.ts",
+   "main": "server.js",
    "license": "ISC",
    "author": "Thomas Nagy",
    "engines": {
       "node": "16.14.2"
    },
    "scripts": {
-      "start": "nodemon server.ts",
-      "dev": "nodemon -L server.ts",
+      "start": "nodemon server.js",
+      "dev": "nodemon -L server.js",
       "build": "tsc -p ."
    },
    "dependencies": {
