@@ -10,12 +10,15 @@ const getTokenFromAuthorizationHeader = (authHeader) => {
     return authHeader && authHeader?.split(' ')[1];
 };
 const authenticateAccessToken = (req, res, next) => {
+    // az access token-re van itt szükségem
     const token = getTokenFromAuthorizationHeader(req.headers.authorization);
     if (!token)
         return res.sendStatus(401);
     jsonwebtoken_1.default.verify(token, endpoints_config_1.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err)
             return res.status(403).json({ errorMessage: 'accessToken token expired' });
+        if (!user)
+            return res.status(404).json({ errorMessage: 'user not found' });
         req.user = user;
         next();
     });
@@ -28,7 +31,9 @@ const checkUserIsAdmin = (req, res, next) => {
     jsonwebtoken_1.default.verify(token, endpoints_config_1.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err)
             return res.status(403).json({ errorMessage: 'accessToken token expired' });
-        if (user?.isAdmin && user) {
+        if (!user)
+            return res.status(404).json({ errorMessage: 'user not found' });
+        if (user.isAdmin) {
             req.user = user;
             next();
         }
@@ -38,3 +43,5 @@ const checkUserIsAdmin = (req, res, next) => {
     });
 };
 exports.checkUserIsAdmin = checkUserIsAdmin;
+// https://dev.to/nilanth/how-to-secure-jwt-in-a-single-page-application-cko
+// https://www.youtube.com/watch?v=27KeYk-5vJw&ab_channel=DaveGray

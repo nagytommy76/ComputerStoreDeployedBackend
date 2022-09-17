@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ErrorResponse = exports.checkTokensValidityController = exports.loginUserController = exports.registerUserController = void 0;
+exports.ErrorResponse = exports.checkTokensValidityController = exports.logoutController = exports.loginUserController = exports.registerUserController = void 0;
 const User_1 = require("../../models/User/User");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -54,10 +54,17 @@ const loginUserController = async (req, res) => {
                     .status(403)
                     .json((0, exports.ErrorResponse)(true, 'Az email címed még nem lett regsiztrálva! Kérlek erősítsd meg!'));
             const accessToken = generateTokens(user._id, user.userName, user.isAdmin, user.email, endpoints_config_1.ACCESS_TOKEN_SECRET);
-            const refreshToken = generateTokens(user._id, user.userName, user.isAdmin, user.email, endpoints_config_1.REFRESH_TOKEN_SECRET, '1day');
-            res.status(200).json({
+            const refreshToken = generateTokens(user._id, user.userName, user.isAdmin, user.email, endpoints_config_1.REFRESH_TOKEN_SECRET, '2day');
+            // Itt a lejárati időnek ugyan annyinak kéne lennie mint a tokenenknek
+            res.cookie('refreshToken', refreshToken, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none',
+                maxAge: 2 * 24 * 60 * 60 * 1000, // 2 nap * 24 óra * 1óra * 1 perc
+            })
+                .status(200)
+                .json({
                 accessToken,
-                refreshToken,
                 userId: user._id,
                 userName: user.userName,
                 isAdmin: user.isAdmin,
@@ -71,8 +78,17 @@ const loginUserController = async (req, res) => {
     }
 };
 exports.loginUserController = loginUserController;
+const logoutController = async (req, res) => {
+    const cookies = req.cookies;
+    if (!cookies?.refreshToken)
+        return res.sendStatus(204);
+    res.clearCookie('refreshToken', { httpOnly: true, sameSite: 'none', secure: true });
+    res.json({ message: 'Sikeres kijelentkezés' });
+};
+exports.logoutController = logoutController;
 const checkTokensValidityController = (req, res) => {
-    const refreshToken = req.body.refreshToken;
+    // Ide a refresh token kell
+    const refreshToken = req.cookies?.refreshToken;
     if (!refreshToken)
         return res.sendStatus(401);
     try {
@@ -96,7 +112,7 @@ exports.checkTokensValidityController = checkTokensValidityController;
  * @param expiresIn string
  * @returns an accessToken or refreshToken with the passed in user's data
  */
-const generateTokens = (userId, userName, isAdmin, email, TOKEN_SECRET, expiresIn = '20min') => {
+const generateTokens = (userId, userName, isAdmin, email, TOKEN_SECRET, expiresIn = '15min') => {
     return jsonwebtoken_1.default.sign({ _id: userId, userName, isAdmin, email }, TOKEN_SECRET, { expiresIn });
 };
 const ErrorResponse = (hasError, errorMessage = '', errorType = 'email') => {
