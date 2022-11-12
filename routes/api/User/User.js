@@ -16,7 +16,7 @@ const ResetPassword_1 = require("../../../controllers/User/ResetPassword");
 const router = express_1.default.Router();
 router.post('/register', UserValidator_1.ValidateRegister, Users_1.registerUserController);
 router.post('/login', Users_1.loginUserController);
-router.post('/logout', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, Users_1.logoutController);
+router.post('/logout', Users_1.logoutController);
 router.post('/confirm-email', EmailValidation_1.ValidateEmailRegistrationController);
 router.post('/resend-email', EmailValidation_1.ResendEmailController);
 router.post('/refresh-token', Users_1.checkTokensValidityController);

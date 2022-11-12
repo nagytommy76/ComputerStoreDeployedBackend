@@ -22,5 +22,7 @@ router.post('/memory-comment-like', AuthenticateAccessOrRefreshTokens_1.authenti
 router.delete('/memory-comment-remove', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.removeUsersRatingController);
 // Rating Answers
 router.post('/save-memory-answer', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.saveAnswerController);
+router.patch('/edit-memory-answer', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.editAnswerController);
+router.patch('/edit-memory-comment', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.editCommentController);
 router.delete('/memory-answer-remove', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.removeSingleCommentAnswer);
 module.exports = router;

@@ -23,5 +23,7 @@ router.post('/vga-comment-like', AuthenticateAccessOrRefreshTokens_1.authenticat
 router.delete('/vga-comment-remove', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.removeUsersRatingController);
 // Rating Answers
 router.post('/save-vga-answer', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.saveAnswerController);
+router.patch('/edit-vga-answer', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.editAnswerController);
+router.patch('/edit-vga-comment', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.editCommentController);
 router.delete('/vga-answer-remove', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.removeSingleCommentAnswer);
 module.exports = router;

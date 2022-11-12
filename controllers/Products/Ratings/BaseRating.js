@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseResponse_1 = require("./BaseResponse");
+const LikeDislike_1 = require("./LikeDislike");
 const canReturnById = (state) => ({
     getLeanProductById: async (ProductId) => {
         return await state.productModel.findById(ProductId).lean();
@@ -13,6 +14,9 @@ const canReturnById = (state) => ({
     },
     getRatingValuesByProductId: async (productId) => {
         return await state.productModel.findById(productId, 'ratingValues');
+    },
+    getCommentsInFoundProduct: (Product, commentId) => {
+        return Product.ratingValues.filter(comment => comment._id == commentId);
     },
 });
 const canReturnRatingAndComments = (getLeanProductById) => ({
@@ -67,42 +71,6 @@ const canRateProduct = (getProductById) => ({
             return undefined;
     },
 });
-const canLikeDislike = (getRatingValuesByProductId) => ({
-    likeDislikeComment: async (productId, commentId, userId, isLike) => {
-        const foundProduct = await getRatingValuesByProductId(productId);
-        if (foundProduct) {
-            const foundComment = foundProduct.ratingValues.filter((comment) => comment._id == commentId);
-            // A user a saját kommentjét ne tudja like/dislikeolni
-            if (foundComment[0].userId == userId) {
-                return {
-                    statusCode: 405,
-                    message: 'A saját kommented nem like-olhatod :)',
-                };
-            }
-            if (foundComment[0].responses.length == 0) {
-                // Ha még nincs like/dislike
-                foundComment[0].responses.push({ isLike: isLike, userId });
-            }
-            else {
-                // Ha van már like
-                // A user adott már like/dislike-ot?
-                // Ha egy user már likeolta/dislikeolta az adott commentet, nem engedem még 1*
-                if (foundComment[0].responses.some((element) => element.userId == userId)) {
-                    return { message: 'Már értékelted a kommentet', statusCode: 405 };
-                }
-                else
-                    foundComment[0].responses.push({ isLike, userId });
-            }
-            foundProduct.save();
-            return {
-                message: 'Sikeresen mentve!',
-                statusCode: 201,
-                responses: foundComment[0].responses,
-            };
-        }
-        return { message: '', statusCode: 404 };
-    },
-});
 const canRemoveRating = (getRatingValuesByProductId) => ({
     removeUsersRating: async (productId, commentIdToDelete, userId) => {
         const foundProduct = await getRatingValuesByProductId(productId);
@@ -126,11 +94,12 @@ function BaseRatingController(productModel) {
         ...canReturnAllComments(getProductById.getLeanRatingValuesByProductId),
         ...canGetProductRatingSummary(getProductById.getLeanProductById),
         ...canRateProduct(getProductById.getProductById),
-        ...canLikeDislike(getProductById.getRatingValuesByProductId),
+        ...(0, LikeDislike_1.canLikeDislike)(getProductById.getRatingValuesByProductId),
         ...canRemoveRating(getProductById.getRatingValuesByProductId),
         // Responses
         ...(0, BaseResponse_1.canSaveProductAnswer)(getProductById.getRatingValuesByProductId),
         ...(0, BaseResponse_1.canRemoveProductAnswer)(getProductById.getRatingValuesByProductId),
+        ...(0, BaseResponse_1.canEditProductAnswer)(getProductById.getRatingValuesByProductId),
     };
 }
 exports.default = BaseRatingController;

@@ -22,5 +22,7 @@ router.post('/rate-hdd', AuthenticateAccessOrRefreshTokens_1.authenticateAccessT
 router.post('/hdd-comment-like', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.likeDislikeCommentController);
 // Rating answers
 router.post('/save-hdd-answer', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.saveAnswerController);
+router.patch('/edit-hdd-answer', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.editAnswerController);
+router.patch('/edit-hdd-comment', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.editCommentController);
 router.delete('/hdd-answer-remove', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.removeSingleCommentAnswer);
 module.exports = router;

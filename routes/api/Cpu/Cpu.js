@@ -22,5 +22,7 @@ router.post('/cpu-comment-like', AuthenticateAccessOrRefreshTokens_1.authenticat
 router.delete('/cpu-comment-remove', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.removeUsersRatingController);
 // Rating Answers
 router.post('/save-cpu-answer', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.saveAnswerController);
+router.patch('/edit-cpu-answer', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.editAnswerController);
+router.patch('/edit-cpu-comment', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.editCommentController);
 router.delete('/cpu-answer-remove', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.removeSingleCommentAnswer);
 module.exports = router;

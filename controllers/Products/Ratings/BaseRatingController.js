@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const BaseRating_1 = __importDefault(require("../Ratings/BaseRating"));
+const BaseRating_1 = __importDefault(require("./BaseRating"));
 class BaseRating {
     ProductModel;
     BaseRatingHelper;
@@ -61,7 +61,7 @@ class BaseRating {
     // Rating answers
     saveAnswerController = async (req, res) => {
         try {
-            const { foundProduct, newCommentAnswers } = await this.BaseRatingHelper.saveProductAnswerController(req.body.productId, req.body.commentId, req.body.answer, req.user);
+            const { foundProduct, newCommentAnswers } = await this.BaseRatingHelper.saveProductAnswerController(req.body.productId, req.body.commentId, req.body.commentDepth, req.body.parentCommentId, req.body.answer, req.user);
             foundProduct.save();
             return res.status(201).json(newCommentAnswers);
         }
@@ -82,9 +82,39 @@ class BaseRating {
             return res.status(500).json(error);
         }
     };
+    editAnswerController = async (req, res) => {
+        try {
+            const { answerEditText, answerId, commentId, productId } = req.body;
+            const { foundCommentAnswer } = await this.BaseRatingHelper.editProductAnswerController(productId, commentId, answerId, answerEditText);
+            if (foundCommentAnswer !== null)
+                res.status(200).json({ foundCommentAnswer });
+            else
+                res.sendStatus(404);
+        }
+        catch (error) {
+            console.error(error);
+        }
+    };
+    editCommentController = async (req, res) => {
+        try {
+            const { answerEditText, answerId, commentId, productId } = req.body;
+            const { foundCommentAnswer } = await this.BaseRatingHelper.editProductAnswerController(productId, commentId, answerId, answerEditText);
+            res.status(200).json({ foundCommentAnswer });
+        }
+        catch (error) {
+            console.error(error);
+        }
+    };
     likeDislikeCommentController = async (req, res) => {
         try {
-            const result = await this.BaseRatingHelper.likeDislikeComment(req.body.productId, req.body.commentId, req.user?._id, req.body.isLike);
+            const { productId, commentId, isLike, answerId } = req.body;
+            let result;
+            if (answerId) {
+                result = await this.BaseRatingHelper.likeDislikeAnswers(productId, commentId, req.user?._id, isLike, answerId);
+            }
+            else {
+                result = await this.BaseRatingHelper.likeDislikeComment(productId, commentId, req.user?._id, isLike);
+            }
             switch (result.statusCode) {
                 case 201:
                     return res.status(result.statusCode).json({ responses: result.responses });

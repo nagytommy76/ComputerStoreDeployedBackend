@@ -5,7 +5,7 @@ const mongoose_1 = require("mongoose");
 const responses = {
     type: [
         {
-            userId: { type: String, required: true },
+            userId: { type: String, required: true, unique: true },
             isLike: { type: Boolean, required: true },
         },
     ],
@@ -27,6 +27,8 @@ exports.ProductRatingValuesSchema = {
                         userName: { type: String, required: true },
                         answer: { type: String, required: true },
                         answeredAt: { type: Date, required: true },
+                        parentCommentId: { type: String, required: false, default: null },
+                        commentDepth: { type: Number, required: true, default: 1 },
                         responses,
                     },
                 ],
@@ -55,3 +57,5 @@ exports.BaseSchemaPropertiesAndTypes = {
     isHighlighted: { type: Boolean, default: false },
     ratingValues: exports.ProductRatingValuesSchema,
 };
+// https://github.com/sunny0910/nested-comments/blob/master/controllers/commentsController.js
+// https://makeschool.org/mediabook/oa/tutorials/reddit-clone-in-node-js/comments-on-comments/

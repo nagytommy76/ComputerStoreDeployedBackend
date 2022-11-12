@@ -32,6 +32,7 @@ app.use((0, cors_1.default)({
 app.use((0, cookie_parser_1.default)());
 app.use((0, morgan_1.default)('combined', { stream: accessLogStream }));
 app.use(bodyParser.json());
+app.use('/api/admin', require('./routes/api/Admin/Admin'));
 app.use('/api/vga', require('./routes/api/Vga/Vga'));
 app.use('/api/admin/vga', require('./routes/api/Admin/Vga/Vga'));
 app.use('/api/auth', require('./routes/api/User/User'));

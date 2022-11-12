@@ -22,5 +22,7 @@ router.post('/rate-ssd', AuthenticateAccessOrRefreshTokens_1.authenticateAccessT
 router.post('/ssd-comment-like', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.likeDislikeCommentController);
 // Rating answers
 router.post('/save-ssd-answer', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.saveAnswerController);
+router.patch('/edit-ssd-answer', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.editAnswerController);
+router.patch('/edit-ssd-comment', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.editCommentController);
 router.delete('/ssd-answer-remove', AuthenticateAccessOrRefreshTokens_1.authenticateAccessToken, BaseRating.removeSingleCommentAnswer);
 module.exports = router;
