@@ -21,9 +21,9 @@ const PORT = process.env.PORT || 5050
       console.log(`The app started: ${PORT}`)
    })
 })
-const accessLogStream = fs_1.default.createWriteStream(path_1.default.join(__dirname, 'access.log'), {
+/*const accessLogStream = fs_1.default.createWriteStream(path_1.default.join(__dirname, 'access.log'), {
    flags: 'a',
-})
+})*/
 app.use(
    (0, cors_1.default)({
       credentials: true,

@@ -2,7 +2,7 @@
    "name": "node-api",
    "version": "1.0.0",
    "description": "Computer Store backend REST API",
-   "main": "./server.js",
+   "main": "server.js",
    "license": "ISC",
    "author": "Thomas Nagy",
    "engines": {
