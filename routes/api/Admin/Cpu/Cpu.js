@@ -12,6 +12,6 @@ const router = express_1.default.Router();
 router.get('/get-all', AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, AdminCpuController_1.getAllCpuItemsController);
 router.get('/get-to-delete', AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, AdminCpuController_1.getAllCpuItemsForDeleteController);
 router.post('/insert', CpuValidator_1.insertCpuValidator, AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, CheckValidationErrors_1.checkErrors, AdminCpuController_1.insertCpuController);
-router.post('/modify', CpuValidator_1.insertCpuValidator, AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, CheckValidationErrors_1.checkErrors, AdminCpuController_1.modifyCpuProductController);
+router.patch('/modify', CpuValidator_1.insertCpuValidator, AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, CheckValidationErrors_1.checkErrors, AdminCpuController_1.modifyCpuProductController);
 router.delete('/delete', AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, AdminCpuController_1.deleteCpuProductByIdController);
 module.exports = router;

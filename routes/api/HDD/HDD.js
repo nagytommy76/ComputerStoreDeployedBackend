@@ -14,6 +14,7 @@ const router = (0, express_1.Router)();
 router.get('/', hddProduct.getAllHDDProductController);
 router.get('/filter-data', hddProduct.getHDDFilterData);
 router.get('/details', hddProduct.getHDDDetailsController);
+router.get('/compare', hddProduct.getHDDCompareDetailsController);
 // Ratings
 router.get('/get-hdd-rates', BaseRating.getRatingSummaryController);
 router.get('/get-hdd-comments', BaseRating.getAllComments);

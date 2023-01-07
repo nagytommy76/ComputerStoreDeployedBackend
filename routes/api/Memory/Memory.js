@@ -14,6 +14,7 @@ const BaseRating = new BaseRatingController_1.default(Memory_2.MemoryProduct);
 router.get('/', memoryProduct.getAllMemoryProductController);
 router.get('/filter-data', memoryProduct.getMemoryFilterData);
 router.get('/details', memoryProduct.getMemoryDetailsController);
+router.get('/compare', memoryProduct.getMemoryCompareDetailsController);
 // Ratings
 router.get('/get-memory-rates', BaseRating.getRatingSummaryController);
 router.get('/get-memory-comments', BaseRating.getAllComments);

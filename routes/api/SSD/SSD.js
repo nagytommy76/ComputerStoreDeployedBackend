@@ -14,6 +14,7 @@ const router = (0, express_1.Router)();
 router.get('/', ssdProduct.getAllSSDProductController);
 router.get('/filter-data', ssdProduct.getSSDFilterDataController);
 router.get('/details', ssdProduct.getSSDDetailsController);
+router.get('/compare', ssdProduct.getSSDCompareDetailsController);
 // Ratings
 router.get('/get-ssd-rates', BaseRating.getRatingSummaryController);
 router.get('/get-ssd-comments', BaseRating.getAllComments);

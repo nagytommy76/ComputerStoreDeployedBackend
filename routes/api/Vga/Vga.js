@@ -15,6 +15,8 @@ const BaseRating = new BaseRatingController_1.default(VgaProduct_1.VgaProduct);
 router.get('/', vgaProduct.getAllVgaItemController);
 router.get('/filter-data', vgaProduct.getFilterData);
 router.get('/details', vgaProduct.getVgaDetailsController);
+// Compare
+router.get('/compare', vgaProduct.getVgaCompareDetailsController);
 // Ratings
 router.get('/get-vga-rates', BaseRating.getRatingSummaryController);
 router.get('/get-vga-comments', BaseRating.getAllComments);

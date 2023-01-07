@@ -12,6 +12,6 @@ const router = express_1.default.Router();
 router.get('/get-all', AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, AdminVgaController_1.getAllVgaItemsController);
 router.get('/get-to-delete', AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, AdminVgaController_1.getAllVgaItemsForDeleteController);
 router.post('/insert', AdminVgaValidator_1.insertVgaValidator, AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, CheckValidationErrors_1.checkErrors, AdminVgaController_1.insertVgaItemController);
-router.post('/modify', AdminVgaValidator_1.modifyVgaValidator, AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, CheckValidationErrors_1.checkErrors, AdminVgaController_1.modifyVgaProductController);
+router.patch('/modify', AdminVgaValidator_1.modifyVgaValidator, AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, CheckValidationErrors_1.checkErrors, AdminVgaController_1.modifyVgaProductController);
 router.delete('/delete', AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, AdminVgaController_1.deleteVgaProductByIdController);
 module.exports = router;

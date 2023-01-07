@@ -9,6 +9,6 @@ const router = (0, express_1.Router)();
 router.get('/get-all', AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, HDD_1.getAllHDDToModifyController);
 router.get('/get-to-delete', AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, HDD_1.getAllHDDItemsForDeleteController);
 router.post('/insert', HddValidator_1.insertHDDValidator, AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, CheckValidationErrors_1.checkErrors, HDD_1.insertHDDProductController);
-router.post('/modify', HddValidator_1.insertHDDValidator, AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, CheckValidationErrors_1.checkErrors, HDD_1.modifyHDDProductController);
+router.patch('/modify', HddValidator_1.insertHDDValidator, AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, CheckValidationErrors_1.checkErrors, HDD_1.modifyHDDProductController);
 router.delete('/delete', AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, HDD_1.deleteHDDProductByIdController);
 module.exports = router;

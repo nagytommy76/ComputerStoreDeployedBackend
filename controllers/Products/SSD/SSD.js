@@ -60,7 +60,17 @@ class SSDProduct extends BaseProduct_1.default {
     getSSDDetailsController = async (request, response) => {
         try {
             const foundSSDProducts = await this.returnProductDetails(request.query.productId);
-            response.status(200).json({ productDetails: foundSSDProducts });
+            response.status(200).json({ productDetails: foundSSDProducts[0] });
+        }
+        catch (error) {
+            response.status(500).json({ errorMessage: error });
+        }
+    };
+    getSSDCompareDetailsController = async (request, response) => {
+        try {
+            const convertedToArrayOrString = this.splitStringAndConvertToArray(request.query.productId);
+            const foundDetails = await this.returnProductDetails(convertedToArrayOrString);
+            response.status(200).json({ productDetails: foundDetails });
         }
         catch (error) {
             response.status(500).json({ errorMessage: error });

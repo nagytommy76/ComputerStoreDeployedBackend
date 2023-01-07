@@ -39,7 +39,7 @@ class BaseProduct {
     };
     returnProductDetails = async (productId) => {
         const foundProductDetails = await this.productModel
-            .findById(productId)
+            .find({ _id: productId })
             .select('type typeCode pictureUrls price manufacturer details')
             .sort({ 'details.chartData.timpestamp': 1 })
             .lean();
@@ -57,6 +57,12 @@ class BaseProduct {
         filterDataGroup[0].allManufacturers.sort();
         return filterDataGroup;
     };
+    /**
+     * returns an array from the given string separated by something
+     * @param stringToSplit string
+     * @param separator string @default ','
+     * @returns strring[]
+     */
     splitStringAndConvertToArray = (stringToSplit, separator = ',') => {
         return stringToSplit.split(separator);
     };

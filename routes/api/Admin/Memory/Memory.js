@@ -12,6 +12,6 @@ const router = express_1.default.Router();
 router.get('/get-all', AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, Memory_1.getAllMemoryController);
 router.get('/get-to-delete', AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, Memory_1.getAllMemoryItemsForDeleteController);
 router.post('/insert', MemoryValidator_1.insertMemoryValidator, AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, CheckValidationErrors_1.checkErrors, Memory_1.insertMemoryProduct);
-router.post('/modify', MemoryValidator_1.insertMemoryValidator, AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, CheckValidationErrors_1.checkErrors, Memory_1.modifyMemoryProductController);
+router.patch('/modify', MemoryValidator_1.insertMemoryValidator, AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, CheckValidationErrors_1.checkErrors, Memory_1.modifyMemoryProductController);
 router.delete('/delete', AuthenticateAccessOrRefreshTokens_1.checkUserIsAdmin, Memory_1.deleteMemoryProductByIdController);
 module.exports = router;
